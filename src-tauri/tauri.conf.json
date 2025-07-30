@@ -9,6 +9,16 @@
     "beforeBuildCommand": "npm run build",
     "frontendDist": "../dist"
   },
+  "plugins": {
+    "updater": {
+      "endpoints": [
+        "https://github.com/erenaydin0/CrossDoc/releases/latest/download/update.json"
+      ],
+      "active": true,
+      "dialog": true,
+      "pubkey": ""
+    }
+  },
   "app": {
     "windows": [
       {

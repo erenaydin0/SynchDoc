@@ -8,6 +8,7 @@ import TextCompare from './pages/TextCompare';
 import FileConvert from './pages/FileConvert';
 import PageTransition from './components/PageTransition';
 import ThemeTransition from './components/ThemeTransition';
+import { checkUpdate, installUpdate } from '@tauri-apps/plugin-updater';
 import "./App.css";
 import "./style/PageStyles.css";
 import "./style/Components.css";
@@ -54,6 +55,27 @@ function App() {
   );
 
   const [isThemeTransitioning, setIsThemeTransitioning] = useState(false);
+  
+  // Güncellemeleri kontrol et
+  useEffect(() => {
+    const checkForUpdates = async () => {
+      try {
+        const { shouldUpdate, manifest } = await checkUpdate();
+        if (shouldUpdate) {
+          // Güncelleme mevcut, kullanıcıya sor
+          if (window.confirm(`Yeni sürüm mevcut: ${manifest?.version}\nGüncellemek istiyor musunuz?`)) {
+            // Güncellemeyi indir ve yükle
+            await installUpdate();
+          }
+        }
+      } catch (error) {
+        console.error('Güncelleme kontrolü sırasında hata:', error);
+      }
+    };
+
+    // Uygulama başlatıldığında güncelleme kontrolü yap
+    checkForUpdates();
+  }, []);
 
   const toggleTheme = () => {
     // Tema geçiş animasyonunu başlat
